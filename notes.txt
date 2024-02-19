@@ -1,0 +1,77 @@
+<a title="Pau López" class="spielprofil_tooltip" id="286415" href="/pau-lopez/profil/spieler/286415">P. López</a>
+<a title="Pau López" class="spielprofil_tooltip" id="286415" href="/pau-lopez/profil/spieler/286415">Pau López</a>
+
+connect to db on console: 
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" --port=3306 --host=localhost --user=root -p
+mysql pass: MyNewPass
+database:
+	CREATE TABLE clubs (id MEDIUMINT, player_number SMALLINT,
+       name VARCHAR(20));
+	club
+		club_id
+		club_name_pretty
+		club_name_id
+	
+	player
+		player_id
+		player_name_id
+		player_name_pretty
+	
+	player_in_club
+		CREATE TABLE player_in_club  (player_id MEDIUMINT, club_id MEDIUMINT);
+		player_id
+		club_id
+		
+	player_in_match
+		CREATE TABLE player_in_match  (player_id MEDIUMINT, club_id MEDIUMINT, match_id MEDIUMINT,
+			player_status VARCHAR(70), match_date DATE, player_position VARCHAR(10));
+		player_id
+		match_id
+		player_status
+		match_date
+		player_position
+		club_id
+
+ideas for viz
+	rolling average for starting matches
+	number of player match days lost to specific
+	
+beautiful soup doc:
+	https://www.crummy.com/software/BeautifulSoup/bs4/doc/#searching-the-tree
+	
+python testing:
+	https://realpython.com/python-testing/
+	
+	
+start mysql: cmd as admin > "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe" --console	
+shutdown mysql: cmd as admin > "C:\Program Files\MySQL\MySQL Server 8.0\bin\mysqld.exe" -u root shutdown
+
+delete from player_in_club where player_in_club_id in (select * from (select player_in_club_id from player_in_club where club_id = 124) as t);
+select player_in_match.match_date, player_in_match.player_id, player_in_match.player_status from player_in_match inner join players on player_in_match.player_id = players.player_id where (match_date > "2020-08-18" and club_id = 12);
+	
+from club import Club
+from player import Player
+import requests
+from bs4 import BeautifulSoup
+import mysql.connector
+from matchday import PlayerInMatch
+from database_connectors import read_club_by_id
+from database_connectors import read_player_by_clubid
+from transfermarket_scraper import parse_player_matches
+from database_connectors import read_player_by_id
+player_list = read_player_by_clubid(12)
+matchres_list = []
+for row in player_list:
+	temp_matchlist = parse_player_matches(row)
+	matchres_list.append(temp_matchlist)
+	
+for player in roma.player_list:
+	matchlist = parse_player_matches(player)
+	for match in matchlist:
+		write_player_in_match(match)
+		
+visualization:
+	data frame:
+		x = date
+		y = sum (number_players)
+		color = status
